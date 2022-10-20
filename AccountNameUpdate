@@ -1,0 +1,35 @@
+public class BatchAccountUpdate implements Database.Batchable<SObject> {
+ 
+   public Database.QueryLocator start(Database.BatchableContext bc){
+
+    string query = 'SELECT id, Name FROM Account';
+    return Database.getQueryLocator(query);
+
+   } 
+   public void execute(Database.BatchableContext bc, List <Account> scope){
+        List <Account> updatedAccs = new list <Account>();
+    for (Account a : scope) {
+            if(a.Name == 'Clarusway'){
+                a.Name = a.Name + 'Updated'; // Clarusway Updated
+                updatedAccs.add(a);
+            }
+        }
+        update updatedAccs;
+   }
+
+
+   public void finish (Database.BatchableContext bc){
+       Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+       list<string> emails = new List<String>{'saramaple806@gmail.com'};
+       mail.setSubject('Batch Apex');
+       mail.setToAddresses(emails);
+       mail.setPlainTextBody('Execution Completed');
+       Messaging.sendEmail(new Messaging.SingleEmailMessage[]{mail});
+
+   }
+}
+
+
+
+Debug Screen:
+Database.executeBatch (new BatchAccountUpdate());
