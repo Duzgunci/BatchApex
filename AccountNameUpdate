@@ -29,7 +29,5 @@ public class BatchAccountUpdate implements Database.Batchable<SObject> {
    }
 }
 
-
-
-Debug Screen:
+-------**********Debug Screen:*******----------------
 Database.executeBatch (new BatchAccountUpdate());
